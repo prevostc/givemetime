@@ -7,7 +7,12 @@ node_js:
 install:
 - docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d db
 - docker-compose -f docker-compose.yml build # build for test env
-- docker-compose -f docker-compose.yml -f docker-compose.dev.yml build # build to run tests
+- cd api
+- npm install
+- cd -
+- cd app
+- npm install
+- cd -
 script:
 - docker-compose --version
 - npm run db.migrate
@@ -42,5 +47,4 @@ env:
   # DOCKER_PASS
   - secure: xdl8rLgjqp7Q0uoEjDbtfac4rxaQVBEbQW5tbRWD4vENRFQ/kbMokq5YTa2J/A8eea++cAya9CYyOcfPyKM99/GtwKBArl4ocShjycgqp4/qWhRO9iDndh9RksTlA/6hrZjYJ3W0rmqF0BPWX92vMWUjqd06NEz6ljTw9okWqX6oEKmxwpMb1K3xJvcv0BeTlIDWBnSW6gOam8dL57zP6ZF/XtX9jqCFZjTKGKL1/f/XR4NPA4wpON6yj9Q1HenKspMvRdgHlG2yGXbf6Hbj9dWeTeEo0e//BfuTvmoHgD8mlo7llHn94cgwgK0muKE0tWOF1CHHaka/Fhh60vSMAkGB3RR5l359gKZOmb9d5ZrMVVwRYl69r2wsjQzVTyR4KKSfsUJwD68sx/NsKwl7bT7IPYIPlkAN3nvuZivhYGmKTzlJfx5RaZtgjDELi8vROI67qbVH3JJrqZtUvgjqK4DInKJ2ZEey2f2Iy08G3gm8ZzLBxW2p9qDC4rDu4un/b8Fz14OomdojdLsml5LeENRYwmKniZQIZQcxs982JsEttQA9eRpA4I7PvYLI4szH2jGB8hfeeqp9RJ836FAeemPVvcE7qjaOEj/Xw+si08uwXQubYlwadqiwTYI8ooar1tmsu+cZyts9h28myUH+Gu6bgSBIq6MXTv83eSzQJ3U=
   - COMMIT: ${TRAVIS_COMMIT::8}
-  - DOCKER_COMPOSE_VERSION: 1.8.1
 
