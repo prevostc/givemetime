@@ -26,11 +26,11 @@ after_success:
 # https://sebest.github.io/post/using-travis-ci-to-build-docker-images/
 - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
 - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-- export REPO=give-me-time/node-web-api
+- export REPO=givemetime/node-web-api
 - docker tag $REPO $REPO:$TAG
 - docker tag $REPO $REPO:travis-$TRAVIS_BUILD_NUMBER
 - docker push $REPO
-- export REPO=give-me-time/node-web-app
+- export REPO=givemetime/node-web-app
 - docker tag $REPO $REPO:$TAG
 - docker tag $REPO $REPO:travis-$TRAVIS_BUILD_NUMBER
 - docker push $REPO

@@ -17,7 +17,7 @@ services:
       - 5430:5432
 
   api:
-    image: give-me-time/node-web-api
+    image: givemetime/node-web-api
     build:
       context: ./api
     environment:
@@ -37,7 +37,7 @@ services:
       - 49160:3000
 
   app:
-    image: give-me-time/node-web-app
+    image: givemetime/node-web-app
     build:
       context: ./app
       args:
