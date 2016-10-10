@@ -2,21 +2,23 @@ sudo: required
 services:
 - docker
 language: node_js
+node_js:
+- '6'
 before_install:
 - sudo rm /usr/local/bin/docker-compose
 - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
 - chmod +x docker-compose
 - sudo mv docker-compose /usr/local/bin
+install:
 - docker-compose -f docker-compose.yml up -d db
-node_js:
-- '6'
-script:
 - cd api
 - npm install
 - cd -
 - cd app
 - npm install
 - cd -
+script:
+- docker-compose --version
 - npm run db.migrate
 - npm run db.test
 # also test down migrations
