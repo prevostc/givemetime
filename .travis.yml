@@ -3,6 +3,10 @@ services:
 - docker
 language: node_js
 before_install:
+- sudo rm /usr/local/bin/docker-compose
+- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+- chmod +x docker-compose
+- sudo mv docker-compose /usr/local/bin
 - docker-compose -f docker-compose.yml up -d db
 - cd api
 - npm install
@@ -30,6 +34,7 @@ after_success:
 - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
 - docker push $REPO
 env:
+  DOCKER_COMPOSE_VERSION: 1.8.1
   global:
   # API_URL
   - secure: xHqh/9jtYd77Hc+xfV+tW+1FwPE8QKpgken/JYSHtoakeMp8oOX7HmRLZ7SpHqsIRfoVyamkBfD47LC7+FYIlbN04vL5JnRSGzN/qj6+bAO/cyCbHXz10V7amJy74zpN2TqQdfJJ2KmdFmqEe32KVtu7JiNbRphb7GrbFSG+oVsG10RU9ufgd2eExzq1iRbNSnQJyMGXJz5aZtnov0zQUhs6AmuP5/V/uTQTdB8riV2C9dlKGY1NcF0ULXrKaGCvX0THQgHNAYxaE5bDW08lp2mG5vZsb+cZ4ykEUo3cPECWTE73YCzzC/PK/sR52bRuVM1maQY7TZNF3ZUbVopwXgA0DZdZDyiSG3OB3WJT3cbd2nxjrB72z6KB5Y8l8VSxHkX8e3pQ1ePlu3i0wXBQcbCZfgTUS5GS9qyu6QbnAWlnXkmnX4+zZm1kRdfDsUYy4ZMClgQfP6NiTsE5dWIGav6jRU/U4YHq+nsbbF/JuxhM2Lcsq4oaKS6ldF52daJtm9Psfx25bg2b6rEwHttTrm5ElW2iNsxF1wbqjaxXFn9I9slMv7fpFgBrbyTTiDM4abg0qUxJ3rQANCNX37apyDO2Wyf8NPbQMjgLdUD3dgKlatjRkAr/w94Fhji5ZFPKvtQIffXkKvcYXoalp8j42WoWFhYKdYtW7k5e0dr0Sjs=

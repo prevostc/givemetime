@@ -6,9 +6,9 @@
   "scripts": {
     "start": "node server.js",
     "test.lint": "./node_modules/.bin/eslint . --ext .js --ext .jsx",
-    "test.lint.fix": "npm run --loglevel=silent test.lint -- --fix",
+    "test.lint.fix": "npm --loglevel=silent run test.lint -- --fix",
     "test.unit": "./node_modules/.bin/mocha --compilers js:babel-register --recursive $(find src -name '*.spec.js')",
-    "test.unit.watch": "npm run --loglevel=silent test.unit -- --watch"
+    "test.unit.watch": "npm --loglevel=silent run test.unit -- --watch"
   },
   "devDependencies": {
     "babel-cli": "~6.14.0",
