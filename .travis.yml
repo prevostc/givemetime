@@ -5,9 +5,9 @@ language: node_js
 node_js:
 - '6'
 install:
+- docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d db
 - docker-compose -f docker-compose.yml build # build for test env
 - docker-compose -f docker-compose.yml -f docker-compose.dev.yml build # build to run tests
-- docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d db
 script:
 - docker-compose --version
 - npm run db.migrate
