@@ -4,19 +4,10 @@ services:
 language: node_js
 node_js:
 - '6'
-before_install:
-- sudo rm /usr/local/bin/docker-compose
-- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-- chmod +x docker-compose
-- sudo mv docker-compose /usr/local/bin
 install:
-- docker-compose -f docker-compose.yml up -d db
-- cd api
-- npm install
-- cd -
-- cd app
-- npm install
-- cd -
+- docker-compose -f docker-compose.yml build # build for test env
+- docker-compose -f docker-compose.yml -f docker-compose.dev.yml build # build to run tests
+- docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d db
 script:
 - docker-compose --version
 - npm run db.migrate
@@ -29,9 +20,12 @@ script:
 after_success:
 # https://sebest.github.io/post/using-travis-ci-to-build-docker-images/
 - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-- export REPO=givemetime/givemetime
 - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-- docker-compose build # depends on API_URL and $GOOGLE_CLIENT_ID
+- export REPO=give-me-time/node-web-api
+- docker tag $REPO:$COMMIT $REPO:$TAG
+- docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+- docker push $REPO
+- export REPO=give-me-time/node-web-app
 - docker tag $REPO:$COMMIT $REPO:$TAG
 - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
 - docker push $REPO
@@ -47,6 +41,6 @@ env:
   - secure: VWU/N0tzrfcZkozIbMcCej5h0vYnpGMuwzinH+tSkYk9zlYu9LAVykL5xbt4Wj6VtepecmbScm+EUfRtdjLAQm+6NbqfXU/C+gARZEepb+IOZqa/2cZD0ufcetruqiMDFWZiI0evO/9TEm7DLjUBC59Tq275aI9dOvXOYLNiuVsB7VQaPAWWPT6u4qGkU/v4e/pxp87TtBW2NWdZeE/n2a8boOCOQove4KWqGNh5pOe8ZHO8b3clTtdZq0KA1841sWes+7Y/S+K5RBU5Ndg6kRvb1i/P+jLDgbNYgDtCiyHO6x72Ap5Xbd++MnREkjyFNO7H3XOnIRpvvnrK17xFWDNQiOU/YPQAMHxYJrIh/kV0k3kcv8QTJYSoZw7gEunXJWr9ekjjM0NCqk0aR7YP1QgVH5N3KtJDZ8547hZweKScoNxEIlkGUc3ulxo27/zVAKn5jzv0sKOZwWEX+/Bl98lnjxwoF+Q9NpTHX8gWFqqwXFE4bDH2IoEUEHPkfWC1cD5dlLzXV5FuzsmOXKsgDNwAmVplDI2TdSGTC4fyU8nNY23VW0aS9XVvEka9+k5tD8aS6XNyGchzSADNIr8Hvp2yTe7/CJSl+bi/S16h7DAha9N5yiEhTk7WmWsfxblp+zi2iefoyfgw1LjhvTshHzf6WOlMw+juXGBqWQefMWk=
   # DOCKER_PASS
   - secure: xdl8rLgjqp7Q0uoEjDbtfac4rxaQVBEbQW5tbRWD4vENRFQ/kbMokq5YTa2J/A8eea++cAya9CYyOcfPyKM99/GtwKBArl4ocShjycgqp4/qWhRO9iDndh9RksTlA/6hrZjYJ3W0rmqF0BPWX92vMWUjqd06NEz6ljTw9okWqX6oEKmxwpMb1K3xJvcv0BeTlIDWBnSW6gOam8dL57zP6ZF/XtX9jqCFZjTKGKL1/f/XR4NPA4wpON6yj9Q1HenKspMvRdgHlG2yGXbf6Hbj9dWeTeEo0e//BfuTvmoHgD8mlo7llHn94cgwgK0muKE0tWOF1CHHaka/Fhh60vSMAkGB3RR5l359gKZOmb9d5ZrMVVwRYl69r2wsjQzVTyR4KKSfsUJwD68sx/NsKwl7bT7IPYIPlkAN3nvuZivhYGmKTzlJfx5RaZtgjDELi8vROI67qbVH3JJrqZtUvgjqK4DInKJ2ZEey2f2Iy08G3gm8ZzLBxW2p9qDC4rDu4un/b8Fz14OomdojdLsml5LeENRYwmKniZQIZQcxs982JsEttQA9eRpA4I7PvYLI4szH2jGB8hfeeqp9RJ836FAeemPVvcE7qjaOEj/Xw+si08uwXQubYlwadqiwTYI8ooar1tmsu+cZyts9h28myUH+Gu6bgSBIq6MXTv83eSzQJ3U=
-  - COMMIT=${TRAVIS_COMMIT::8}
+  - COMMIT: ${TRAVIS_COMMIT::8}
   - DOCKER_COMPOSE_VERSION: 1.8.1
 
