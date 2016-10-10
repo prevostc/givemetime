@@ -8,15 +8,15 @@ before_install:
 - chmod +x docker-compose
 - sudo mv docker-compose /usr/local/bin
 - docker-compose -f docker-compose.yml up -d db
+node_js:
+- '6'
+script:
 - cd api
 - npm install
 - cd -
 - cd app
 - npm install
 - cd -
-node_js:
-- '6'
-script:
 - npm run db.migrate
 - npm run db.test
 # also test down migrations
