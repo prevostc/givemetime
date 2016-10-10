@@ -4,6 +4,12 @@ services:
 language: node_js
 before_install:
 - docker-compose -f docker-compose.yml up -d db
+- cd api
+- npm install
+- cd -
+- cd app
+- npm install
+- cd -
 node_js:
 - '6'
 script:
